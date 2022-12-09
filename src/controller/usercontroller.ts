@@ -55,9 +55,32 @@ export async function RegisterUser(req: Request, res: Response, next: NextFuncti
    res: Response,
    next: NextFunction
  ) {
-   const id = uuidv4();
-   try {
-     res.status(200).json({ solo: "weat" });
-   } catch (err) {}
+  // const id = uuidv4();
+  try {
+    const validationResult = loginSchema.validate(req.body, options);
+
+    if (validationResult.error) {
+      return res.status(400).json({
+        Error: validationResult.error.details[0].message,
+      });
+    }
+           const User = await UserInstance.findOne({
+             where: { email: req.body.email },
+           }) as unknown as { [key: string]: string }
+    
+    const { id } = User
+    const token = generateToken({ id })
+    const validUser= await bcrypt.compare(req.body.password, User.password)
+     if (!validUser) {
+       res.status(401).json({
+         message: "Password do not match",
+       });
+     }
+  } catch (err) {
+    res.status(500).json({
+      msg: "failed to login",
+      route: "/login",
+    });
+  }
  }
 
