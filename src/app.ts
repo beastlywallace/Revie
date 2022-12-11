@@ -4,7 +4,7 @@ import path  from 'path';
 import cookieParser  from 'cookie-parser';
 import logger  from 'morgan';
 // import cors from "cors";
-import indexRouter  from './routes/index';
+import indexRouter  from './routes/review';
 import usersRouter  from './routes/users';
 import db from './config/database.config';
 

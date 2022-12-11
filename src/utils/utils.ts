@@ -3,8 +3,11 @@ import jwt from "jsonwebtoken";
 
 
 export const createReviewSchema = Joi.object().keys({
-    title: Joi.string().required,
-     completed:Joi.boolean().required()
+    // title: Joi.string(),
+     reviews: Joi.string().required(),
+  image: Joi.string(),
+    video: Joi.string(),
+  ratings: Joi.number()
 })
 
 
