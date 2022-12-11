@@ -92,34 +92,34 @@ export async function RegisterUser(req: Request, res: Response, next: NextFuncti
   }
  }
 
- export async function getUsers(
-   req: Request,
-   res: Response,
-   next: NextFunction
- ) {
-   try {
-     const limit = req.query?.limit as number | undefined;
-     const offset = req.query?.offset as number | undefined;
-     //  const record = await TodoInstance.findAll({where: {},limit, offset})
-     const record = await UserInstance.findAndCountAll({
-       limit,
-       offset,
-       include: [
-         {
-           model: ReviewInstance,
-           as: "todo",
-         },
-       ],
-     });
-     res.status(200).json({
-       msg: "You have successfully fetch all todos",
-       count: record.count,
-       record: record.rows,
-     });
-   } catch (error) {
-     res.status(500).json({
-       msg: "failed to read",
-       route: "/read",
-     });
-   }
- }
+//  export async function getUsers(
+//    req: Request,
+//    res: Response,
+//    next: NextFunction
+//  ) {
+//    try {
+//      const limit = req.query?.limit as number | undefined;
+//      const offset = req.query?.offset as number | undefined;
+//      //  const record = await TodoInstance.findAll({where: {},limit, offset})
+//      const record = await UserInstance.findAndCountAll({
+//        limit,
+//        offset,
+//        include: [
+//          {
+//            model: ReviewInstance,
+//            as: "todo",
+//          },
+//        ],
+//      });
+//      res.status(200).json({
+//        msg: "You have successfully fetch all todos",
+//        count: record.count,
+//        record: record.rows,
+//      });
+//    } catch (error) {
+//      res.status(500).json({
+//        msg: "failed to read",
+//        route: "/read",
+//      });
+//    }
+//  }

@@ -10,7 +10,7 @@ import {
 
 
 
-export async function Reviews(
+export async function createReviews(
     req: Request | any,
     res: Response,
     next: NextFunction
@@ -45,4 +45,38 @@ export async function Reviews(
     route: "/create",
   });
 }
+}
+
+
+export async function getReview(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const limit = req.query?.limit as number | undefined;
+    const offset = req.query?.offset as number | undefined;
+    //  const record = await TodoInstance.findAll({where: {},limit, offset})
+    const record = await ReviewInstance.findAndCountAll({
+      limit,
+      offset,
+      include: [
+        {
+          model: UserInstance,
+          attributes: ["id", "firstname", "lastname","username", "email", "phonenumber"],
+          as: "user",
+        },
+      ],
+    });
+    res.status(200).json({
+      msg: "You have successfully fetch all Reviews",
+      count: record.count,
+      record: record.rows,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "failed to read",
+      route: "/read",
+    });
+  }
 }
