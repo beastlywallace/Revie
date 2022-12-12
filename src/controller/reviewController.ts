@@ -9,6 +9,7 @@ import {
 } from "../utils/utils";
 import cloudinary from "cloudinary";
 import { errorMonitor } from "stream";
+import { VisitorsInstance } from "../model/visitorsModel";
 
 export async function createReviews(
   req: Request | any,
@@ -32,9 +33,8 @@ export async function createReviews(
     }
 
     let result: Record<string, string> = {};
-    
+
     if (req.body.image) {
-      
       result = await cloudinary.v2.uploader.upload(req.body.image, {
         //formats allowed for download
         allowed_formats: ["jpg", "png", "svg", "jpeg"],
@@ -80,18 +80,18 @@ export async function createReviews(
 
     console.log(record);
 
-    res.status(201).json({
+    return res.status(201).json({
       msg: "You have successfully created a review",
       record,
     });
   } catch (err) {
     console.log(err);
     // if (err.error.path) {
-       
+
     //  }
-    res.status(500).json({
+    return res.status(500).json({
       // msg: "failed to create",
-     
+
       msg: "check file format",
       route: "/create",
     });
@@ -124,12 +124,12 @@ export async function upDateReview(
       image: image,
       video: video,
     });
-    res.status(200).json({
+    return res.status(200).json({
       msg: "You have successfully updated your Review",
       updatedrecord,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       msg: "failed to update",
       route: "/update/:id",
     });
@@ -162,13 +162,13 @@ export async function getReview(
         },
       ],
     });
-    res.status(200).json({
+    return res.status(200).json({
       msg: "You have successfully fetch all Reviews",
       count: record.count,
       record: record.rows,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       msg: "failed to read",
       route: "/read",
     });
@@ -181,17 +181,14 @@ export async function getReviewsByRating(
 ) {
   try {
     const record = await ReviewInstance.findAll({
-      order: [
-        ["rating", "DESC"],
-    
-      ],
+      order: [["rating", "DESC"]],
     });
-    res.status(200).json({
+    return res.status(200).json({
       msg: "You have successfully fetch all Reviews",
-      record: record
+      record: record,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       msg: "failed to read",
       route: "/read",
     });
@@ -204,21 +201,103 @@ export async function getReviewsByRecent(
 ) {
   try {
     const record = await ReviewInstance.findAll({
-      order: [
-      
-        ["createdAt", "DESC"],
-      ],
+      order: [["createdAt", "DESC"]],
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       msg: "You have successfully fetch all Reviews",
       record: record,
     });
   } catch (error) {
-        console.log(error)
-    res.status(500).json({
+    console.log(error);
+    return res.status(500).json({
       msg: "failed to Get Reviews",
       route: "/read",
+    });
+  }
+}
+
+export async function createVisitorReviews(
+  req: Request | any,
+  res: Response,
+  next: NextFunction
+) {
+  const id = uuidv4();
+  try {
+    const { houseId, rating, review } = req.body;
+    const house = await ReviewInstance.findOne({ where: { id: houseId } });
+
+    if (!house) {
+      return res.status(401).json({
+        msg: " Sorry this house does not exist",
+      });
+    }
+    const record = await VisitorsInstance.create({
+      id,
+      rating: +rating,
+      review,
+      houseId,
+    });
+
+    return res.status(201).json({
+      msg: "You have successfully rated a house",
+      record,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      msg: "nawa for you o",
+      route: "/create",
+    });
+  }
+}
+
+export async function getSingleReview(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const record = await ReviewInstance.findOne({
+      where: { id },
+      include: [
+        {
+          model: VisitorsInstance,
+          as: "visitor_review",
+        },
+      ],
+    });
+    return res.status(200).json({
+      msg: "Successfully gotten a required review",
+      record,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "failed to read single Review",
+      route: "/read/:id",
+    });
+  }
+}
+export async function getSingleReviewV(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const record = await VisitorsInstance.findAll({
+      where: { houseId: id },
+      order: [["rating", "DESC"]],
+    });
+    return res.status(200).json({
+      msg: "Successfully gotten a required review",
+      record,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg: "failed to read single Review",
+      route: "/read/:id",
     });
   }
 }

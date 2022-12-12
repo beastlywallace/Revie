@@ -1,15 +1,16 @@
 import { DataTypes, Model } from "sequelize";
+import { VisitorsInstance } from "./visitorsModel";
 import db from "../config/database.config";
 interface ReviewAttributes {
   id: string;
-  // title: string;
+  title: string;
   reviews: string;
   image: string;
   video: string;
   rating: number;
   userId: string;
 }
-export class ReviewInstance extends Model<ReviewAttributes>{ }
+export class ReviewInstance extends Model<ReviewAttributes> {}
 ReviewInstance.init(
   {
     id: {
@@ -17,10 +18,10 @@ ReviewInstance.init(
       primaryKey: true,
       allowNull: false,
     },
-    // title: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     reviews: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -28,7 +29,7 @@ ReviewInstance.init(
     rating: {
       type: DataTypes.NUMBER,
       allowNull: true,
-      defaultValue: 0
+      defaultValue: 0,
     },
     image: {
       type: DataTypes.STRING,
@@ -50,3 +51,12 @@ ReviewInstance.init(
     tableName: "review",
   }
 );
+
+ReviewInstance.hasMany(VisitorsInstance, {
+  foreignKey: "houseId",
+  as: "visitor_review",
+});
+VisitorsInstance.belongsTo(ReviewInstance, {
+  foreignKey: "houseId",
+  as: "reviews",
+});
