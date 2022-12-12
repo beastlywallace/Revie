@@ -6,10 +6,13 @@ import {
   upDateReview,
   getReviewsByRecent,
   getReviewsByRating,
+} from "../controller/reviewController";
+import {
+ 
   getSingleReview,
   createVisitorReviews,
   getSingleReviewV,
-} from "../controller/reviewController";
+} from "../controller/visitorController";
 const router = express.Router();
 
 /* GET home page. */

@@ -6,11 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const usercontroller_1 = require("../controller/usercontroller");
 const router = express_1.default.Router();
-/* GET users listing. */
-router.get("/", function (req, res, next) {
-    console.log("wally");
-    res.status(200).json({ "solo": "respondtt with a resource" });
-});
 router.post("/login", usercontroller_1.LoginUser);
 router.post("/signup", usercontroller_1.RegisterUser);
 // router.get("/allusers", getUsers);
