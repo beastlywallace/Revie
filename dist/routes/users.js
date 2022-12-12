@@ -13,5 +13,5 @@ router.get("/", function (req, res, next) {
 });
 router.post("/login", usercontroller_1.LoginUser);
 router.post("/signup", usercontroller_1.RegisterUser);
-router.get("/allusers", usercontroller_1.getUsers);
+// router.get("/allusers", getUsers);
 exports.default = router;

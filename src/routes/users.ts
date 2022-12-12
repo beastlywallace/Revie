@@ -2,7 +2,7 @@ import express, {Request, Response ,NextFunction } from 'express';
 import {
   RegisterUser,
   LoginUser,
-  getUsers,
+  // getUsers,
 } from "../controller/usercontroller";
 const router = express.Router();
 
@@ -13,6 +13,6 @@ router.get("/", function (req: Request, res: Response, next: NextFunction) {
 });
 router.post("/login", LoginUser);
 router.post("/signup", RegisterUser);
-router.get("/allusers", getUsers);
+// router.get("/allusers", getUsers);
 
 export default router;
