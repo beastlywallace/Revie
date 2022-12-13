@@ -8,8 +8,8 @@ import {
   updateReviewSchema,
 } from "../utils/utils";
 import cloudinary from "cloudinary";
-import { errorMonitor } from "stream";
-import { VisitorsInstance } from "../model/visitorsModel";
+
+import multer, { FileFilterCallback } from "multer";
 
 export async function createReviews(
   req: Request | any,
@@ -44,34 +44,6 @@ export async function createReviews(
         folder: "iqube",
       });
     }
-
-    // let result2: Record<string, string> = {};
-    // if (req.body.video) {
-    //   result2 = await cloudinary.v2.uploader.upload(req.body.video, {
-    //     //formats allowed for download
-    //     allowed_formats: ["mp4", "3gp", "mkv"],
-    //     //generates a new id for each uploaded image
-    //     public_id: "",
-    //     //fold where the images are stored
-    //     folder: "iqube",
-    //   });
-    // }
-    //         let result2: Record<string, string> = {};
-    //          if (req.body.video) {
-    //        let result2= cloudinary.v2.uploader
-    // .upload(req.body.video,
-    //   { resource_type: "video",
-    //     public_id: "",
-    //     chunk_size: 6000000,
-    //      folder: "iqube",
-    //     eager: [
-    //       { width: 300, height: 300, crop: "pad", audio_codec: "none" },
-    //       { width: 160, height: 100, crop: "crop", gravity: "south", audio_codec: "none" } ],
-    //     eager_async: true })
-    // .then(result=>console.log(result));
-
-    //       }
-
     const record = await ReviewInstance.create({
       id,
       ...req.body,
@@ -104,11 +76,11 @@ export async function upDateReview(
   next: NextFunction
 ) {
   try {
-     cloudinary.v2.config({
-       cloud_name: process.env.CLOUDINARY_NAME,
-       api_key: process.env.CLOUD_API_KEY,
-       api_secret: process.env.CLOUD_API_SECRET,
-     });
+    cloudinary.v2.config({
+      cloud_name: process.env.CLOUDINARY_NAME,
+      api_key: process.env.CLOUD_API_KEY,
+      api_secret: process.env.CLOUD_API_SECRET,
+    });
 
     const { id } = req.params;
     const { reviews, image, video } = req.body;
@@ -119,19 +91,28 @@ export async function upDateReview(
       });
     }
 
-let result: Record<string, string> = {};
+    let result: Record<string, string> = {};
 
-if (req.body.image) {
-  result = await cloudinary.v2.uploader.upload(req.body.image, {
-    //formats allowed for download
-    allowed_formats: ["jpg", "png", "svg", "jpeg"],
-    //generates a new id for each uploaded image
-    public_id: "",
-    //fold where the images are stored
-    folder: "iqube",
-  });
-}
-
+    if (req.body.image) {
+      result = await cloudinary.v2.uploader.upload(req.body.image, {
+        //formats allowed for download
+        allowed_formats: ["jpg", "png", "svg", "jpeg"],
+        //generates a new id for each uploaded image
+        public_id: "",
+        //fold where the images are stored
+        folder: "iqube",
+      });
+    }
+    //  if (req.body.video) {
+    //    result = await cloudinary.v2.uploader.upload(req.body.video, {
+    //      //formats allowed for download
+    //      allowed_formats: ["3gp", "mp4"],
+    //      //generates a new id for each uploaded image
+    //      public_id: "",
+    //      //fold where the images are stored
+    //      folder: "iqube",
+    //    });
+    //  }
 
     const record = await ReviewInstance.findOne({ where: { id } });
     if (!record) {
@@ -236,88 +217,3 @@ export async function getReviewsByRecent(
     });
   }
 }
-
-// export async function createVisitorReviews(
-//   req: Request | any,
-//   res: Response,
-//   next: NextFunction
-// ) {
-//   const id = uuidv4();
-//   try {
-//     const { houseId, rating, review } = req.body;
-//     const house = await ReviewInstance.findOne({ where: { id: houseId } });
-
-//     if (!house) {
-//       return res.status(401).json({
-//         msg: " Sorry this house does not exist",
-//       });
-//     }
-//     const record = await VisitorsInstance.create({
-//       id,
-//       rating: +rating,
-//       review,
-//       houseId,
-//     });
-
-//     return res.status(201).json({
-//       msg: "You have successfully rated a house",
-//       record,
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(500).json({
-//       msg: "nawa for you o",
-//       route: "/create",
-//     });
-//   }
-// }
-
-// export async function getSingleReview(
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) {
-//   try {
-//     const { id } = req.params;
-//     const record = await ReviewInstance.findOne({
-//       where: { id },
-//       include: [
-//         {
-//           model: VisitorsInstance,
-//           as: "visitor_review",
-//         },
-//       ],
-//     });
-//     return res.status(200).json({
-//       msg: "Successfully gotten a required review",
-//       record,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       msg: "failed to read single Review",
-//       route: "/read/:id",
-//     });
-//   }
-// }
-// export async function getSingleReviewV(
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) {
-//   try {
-//     const { id } = req.params;
-//     const record = await VisitorsInstance.findAll({
-//       where: { houseId: id },
-//       order: [["rating", "DESC"]],
-//     });
-//     return res.status(200).json({
-//       msg: "Successfully gotten a required review",
-//       record,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       msg: "failed to read single Review",
-//       route: "/read/:id",
-//     });
-//   }
-// }

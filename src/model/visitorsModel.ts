@@ -16,7 +16,7 @@ VisitorsInstance.init(
     },
     rating: {
       type: DataTypes.NUMBER,
-      allowNull: true,
+      allowNull: false,
       defaultValue: 0,
     },
     review: {

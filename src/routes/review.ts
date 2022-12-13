@@ -8,10 +8,9 @@ import {
   getReviewsByRating,
 } from "../controller/reviewController";
 import {
- 
-  getSingleReview,
+  getSingleReviewByRecent,
   createVisitorReviews,
-  getSingleReviewV,
+  sortSingleReviewByRating,
 } from "../controller/visitorController";
 const router = express.Router();
 
@@ -23,10 +22,10 @@ router.get("/", function (req: Request, res: Response, next: NextFunction) {
 router.post("/create", auth, createReviews);
 router.patch("/update/:id", auth, upDateReview);
 router.get("/getReview", getReview);
-router.get("/getonlyreview/:id", getSingleReviewV);
+router.get("/getonlyreviewByRating/:id", sortSingleReviewByRating);
 router.get("/getSortedByRecent", getReviewsByRecent);
 router.get("/getSortedByRating", getReviewsByRating);
-router.get("/getSingleReview/:id", getSingleReview);
+router.get("/getSingleReviewByRecent/:id", getSingleReviewByRecent);
 router.post("/createVisitorReviews", createVisitorReviews);
 
 export default router;

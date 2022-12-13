@@ -2,16 +2,18 @@ import Joi from "joi";
 import jwt from "jsonwebtoken";
 
 export const createReviewSchema = Joi.object().keys({
-  title: Joi.string(),
-  reviews: Joi.string(),
+  title: Joi.string().required(),
+  reviews: Joi.string().required(),
   image: Joi.string(),
   video: Joi.string(),
   // rating: Joi.number()
 });
 export const visitorReviewSchema = Joi.object().keys({
-  rating: Joi.string()
-    .regex(/^[1-5]{1,1}$/)
-    .required(),
+  rating: Joi.number().integer()
+      .min(0)
+      .max(5)
+      .required(),
+
   review: Joi.number().required(),
   houseId: Joi.string().required(),
 });

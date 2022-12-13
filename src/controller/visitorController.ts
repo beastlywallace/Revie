@@ -27,7 +27,7 @@ export async function createVisitorReviews(
     }
     const record = await VisitorsInstance.create({
       id,
-      rating: +rating,
+      rating: rating,
       review,
       houseId,
     });
@@ -39,59 +39,73 @@ export async function createVisitorReviews(
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      msg: "nawa for you o",
-      route: "/create",
+      msg: "could not place review",
     });
   }
 }
 
-export async function getSingleReview(
+export async function getSingleReviewByRecent(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
     const { id } = req.params;
-    const record = await ReviewInstance.findOne({
-      where: { id },
-      include: [
-        {
-          model: VisitorsInstance,
-          as: "visitor_review",
-        },
-      ],
+
+    const record = await VisitorsInstance.findAll({
+      where: { houseId: id },
+      order: [["createdAt", "DESC"]],
     });
+    const apartment = await ReviewInstance.findOne({
+      where: { id },
+    });
+    if (record.length === 0) {
+      res.status(500).json({
+        msg: "house not exist",
+      });
+    }
+    let apartmentTitle = apartment?.dataValues.title;
     return res.status(200).json({
-      msg: "Successfully gotten a required review",
+      msg: `Successfully gotten ${apartmentTitle} reviews sorted By Most Recent`,
       record,
     });
   } catch (error) {
     res.status(500).json({
-      msg: "failed to read single Review",
+      msg: "failed to read  Review",
       route: "/read/:id",
     });
   }
 }
-export async function getSingleReviewV(
+
+export async function sortSingleReviewByRating(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
     const { id } = req.params;
+
     const record = await VisitorsInstance.findAll({
       where: { houseId: id },
       order: [["rating", "DESC"]],
     });
+    const apartment = await ReviewInstance.findOne({
+      where: { id },
+    });
+    if (record.length === 0) {
+      res.status(500).json({
+        msg: "house not exist",
+      });
+    }
+    let apartmentTitle = apartment?.dataValues.title;
     return res.status(200).json({
-      msg: "Successfully gotten a required review",
+      msg: `Successfully gotten ${apartmentTitle} reviews sorted By Most Recent`,
       record,
     });
   } catch (error) {
     res.status(500).json({
-      msg: "failed to read single Review",
+      msg: "failed to read  Review",
       route: "/read/:id",
     });
   }
 }
-//
