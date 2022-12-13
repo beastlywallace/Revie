@@ -8,7 +8,6 @@ import {
   updateReviewSchema,
 } from "../utils/utils";
 import cloudinary from "cloudinary";
-
 import multer, { FileFilterCallback } from "multer";
 
 export async function createReviews(
@@ -58,13 +57,11 @@ export async function createReviews(
     });
   } catch (err) {
     console.log(err);
-    // if (err.error.path) {
-
-    //  }
+  
     return res.status(500).json({
-      // msg: "failed to create",
+     
 
-      msg: "check file format",
+      msg: "failed to create,check file format",
       route: "/create",
     });
   }
@@ -83,7 +80,7 @@ export async function upDateReview(
     });
 
     const { id } = req.params;
-    const { reviews, image, video } = req.body;
+    const { address, reviews, image, video } = req.body;
     const validationResult = updateReviewSchema.validate(req.body, options);
     if (validationResult.error) {
       return res.status(400).json({
@@ -103,21 +100,12 @@ export async function upDateReview(
         folder: "iqube",
       });
     }
-    //  if (req.body.video) {
-    //    result = await cloudinary.v2.uploader.upload(req.body.video, {
-    //      //formats allowed for download
-    //      allowed_formats: ["3gp", "mp4"],
-    //      //generates a new id for each uploaded image
-    //      public_id: "",
-    //      //fold where the images are stored
-    //      folder: "iqube",
-    //    });
-    //  }
+   
 
     const record = await ReviewInstance.findOne({ where: { id } });
     if (!record) {
       return res.status(404).json({
-        Error: "Cannot find existing todo",
+        Error: "Cannot find existing Apartment",
       });
     }
     const updatedrecord = await record.update({

@@ -99,7 +99,7 @@ export async function sortSingleReviewByRating(
     }
     let apartmentTitle = apartment?.dataValues.title;
     return res.status(200).json({
-      msg: `Successfully gotten ${apartmentTitle} reviews sorted By Most Recent`,
+      msg: `Successfully gotten ${apartmentTitle} reviews sorted By Most Rated`,
       record,
     });
   } catch (error) {

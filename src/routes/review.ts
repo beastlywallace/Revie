@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import { auth } from "../middleware/auth";
 import {
   createReviews,
@@ -14,11 +14,6 @@ import {
 } from "../controller/visitorController";
 const router = express.Router();
 
-/* GET home page. */
-router.get("/", function (req: Request, res: Response, next: NextFunction) {
-  console.log("started");
-  res.render("index", { title: "sucesful" });
-});
 router.post("/create", auth, createReviews);
 router.patch("/update/:id", auth, upDateReview);
 router.get("/getReview", getReview);

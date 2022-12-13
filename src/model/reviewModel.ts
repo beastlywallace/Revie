@@ -4,6 +4,7 @@ import db from "../config/database.config";
 interface ReviewAttributes {
   id: string;
   title: string;
+  address: string;
   reviews: string;
   image: string;
   video: string;
@@ -19,6 +20,10 @@ ReviewInstance.init(
       allowNull: false,
     },
     title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    address: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -42,9 +47,6 @@ ReviewInstance.init(
     userId: {
       type: DataTypes.STRING,
     },
-    // date: {
-    //   type: DataTypes.STRING,
-    // },
   },
   {
     sequelize: db,

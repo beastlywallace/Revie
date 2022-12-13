@@ -3,7 +3,7 @@ import express, {Request, Response, NextFunction } from 'express';
 import path  from 'path';
 import cookieParser  from 'cookie-parser';
 import logger  from 'morgan';
-// import cors from "cors";
+import cors from "cors";
 import indexRouter  from './routes/review';
 import usersRouter  from './routes/users';
 import db from './config/database.config';
@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-// app.use(cors());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
