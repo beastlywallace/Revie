@@ -25,6 +25,11 @@ export async function createVisitorReviews(
         msg: " Sorry this house does not exist",
       });
     }
+    if (rating > 5 || rating < 0) {
+        return res.status(403).json({
+          msg: "forbidden!, rating must be between 0-5",
+        });
+    }
     const record = await VisitorsInstance.create({
       id,
       rating: rating,
@@ -33,7 +38,7 @@ export async function createVisitorReviews(
     });
 
     return res.status(201).json({
-      msg: "You have successfully rated a house",
+      msg: "You have successfully rated how helpful a house was",
       record,
     });
   } catch (err) {

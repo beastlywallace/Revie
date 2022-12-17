@@ -14,6 +14,11 @@ import {
 } from "../controller/visitorController";
 const router = express.Router();
 
+router.get("/", (req, res) => {
+  return res.status(200).json({
+   message:  "welcome to Revie wow!"
+  });
+});
 router.post("/create", auth, createReviews);
 router.patch("/update/:id", auth, upDateReview);
 router.get("/getReview", getReview);

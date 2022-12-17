@@ -52,6 +52,7 @@ export async function RegisterUser(
     });
     res.status(201).json({
       msg: "You have succesfully created a user",
+      record
     });
   } catch (err) {
     res.status(500).json({

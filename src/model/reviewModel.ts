@@ -8,7 +8,6 @@ interface ReviewAttributes {
   reviews: string;
   image: string;
   video: string;
-  rating: number;
   userId: string;
 }
 export class ReviewInstance extends Model<ReviewAttributes> {}
@@ -31,11 +30,7 @@ ReviewInstance.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    rating: {
-      type: DataTypes.NUMBER,
-      allowNull: true,
-      defaultValue: 0,
-    },
+  
     image: {
       type: DataTypes.STRING,
       allowNull: true,
